@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=9454f7d5" />
     <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=2d1dc041" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86898c54" />
     <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -239,6 +239,7 @@ data-aria-dark="Switch to auto color mode">
       <i class="i-lucide close"></i>
     </button>
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#what-is-core-ai">What is Core AI?</a></li>
 <li><a class="reference internal" href="#what-is-coreai-opt">What is <code class="docutils literal notranslate"><span class="pre">coreai-opt</span></code>?</a></li>
 <li><a class="reference internal" href="#types-of-compression">Types of compression</a></li>
 <li><a class="reference internal" href="#compression-workflows">Compression workflows</a></li>
@@ -310,6 +311,19 @@ data-aria-dark="Switch to auto color mode">
           <!-- pyml disable MD041-->
 <section class="tex2jax_ignore mathjax_ignore" id="core-ai-optimization-documentation">
 <h1>Core AI Optimization Documentation<a class="headerlink" href="#core-ai-optimization-documentation" title="Link to this heading">¶</a></h1>
+<section id="what-is-core-ai">
+<h2>What is Core AI?<a class="headerlink" href="#what-is-core-ai" title="Link to this heading">¶</a></h2>
+<p>Core AI is a set of technologies for deploying machine learning models on Apple hardware, covering the full model deployment lifecycle: from model optimization and conversion, to debugging, to app integration. Models run entirely on device on Apple silicon, with no server required.</p>
+<img alt="Diagram of the Core AI ecosystem. At the top, Core AI Models provides ready-to-use models and examples. Core AI Optimization and Core AI PyTorch Extensions prepare models for deployment, producing a .aimodel file. Core AI Debugger and Xcode support integration and debugging. Core AI Framework runs models on device." class="align-center" src="_images/core-ai-ecosystem.png" />
+<p>The Core AI ecosystem consists of the following components:</p>
+<ul class="simple">
+<li><p>Convert PyTorch models to the Core AI model format (<code class="docutils literal notranslate"><span class="pre">.aimodel</span></code>) using <a class="reference external" href="https://github.com/apple/coreai-torch">Core AI PyTorch Extensions</a></p></li>
+<li><p>Compress models with quantization, palettization, and pruning using <a class="reference external" href="https://github.com/apple/coreai-optimization">Core AI Optimization</a></p></li>
+<li><p>Load and run models in an app with the <a class="reference external" href="https://developer.apple.com/documentation/coreai">Core AI Framework</a></p></li>
+<li><p>Inspect, debug, and profile models using <a class="reference external" href="https://developer.apple.com/documentation/coreai/inspecting-debugging-and-profiling-core-ai-models">Core AI Debugger</a></p></li>
+<li><p>Get popular open-source models with conversion, optimization, and Swift app integration code using <a class="reference external" href="https://github.com/apple/coreai-models">Core AI Models</a></p></li>
+</ul>
+</section>
 <section id="what-is-coreai-opt">
 <h2>What is <code class="docutils literal notranslate"><span class="pre">coreai-opt</span></code>?<a class="headerlink" href="#what-is-coreai-opt" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">coreai-opt</span></code> is a Python library for compressing PyTorch models for deployment on Apple Silicon. It allows you to apply compression-based optimizations (such as quantization or palettization) to any PyTorch model, producing a transformed PyTorch model that can be converted to a Core AI model and run with the <a class="reference external" href="https://developer.apple.com/documentation/coreai">Core AI</a> framework.</p>
