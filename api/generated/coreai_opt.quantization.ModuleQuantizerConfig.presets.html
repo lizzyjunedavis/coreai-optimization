@@ -73,6 +73,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_quantization.html">Applying quantization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_palettization.html">Applying palettization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_palettization_and_activation_quantization.html">Applying joint palettization and activation quantization to an MNIST model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_pruning.html">Applying magnitude pruning to an MNIST model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/model_examples.html">Model Examples</a><ul>
@@ -97,15 +98,25 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../../palettization/config.html">Config API</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../pruning/index.html">Pruning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/config.html">Config API</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Other Workflows and Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/joint_compression.html">Joint Compression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/mixed_precision.html">Mixed-Precision Compression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/activation_comparison.html">Comparing Intermediate Activations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/casting.html">16-bit PyTorch Model Casting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/coreai_compression.html">Compressing Core AI Models</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Debugging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../debugging/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugging/graph_mode_troubleshooting.html">Graph Mode Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
 <ul class="current">
@@ -178,6 +189,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="coreai_opt.pruning.spec.Unstructured.html">coreai_opt.pruning.spec.Unstructured</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coreai_opt.pruning.spec.default_weight_pruning_spec.html">coreai_opt.pruning.spec.default_weight_pruning_spec</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coreai_opt.quantization.ExecutionMode.html">coreai_opt.quantization.ExecutionMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coreai_opt.quantization.InvalidExecutionModeError.html">coreai_opt.quantization.InvalidExecutionModeError</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="coreai_opt.quantization.ModuleQuantizerConfig.html">coreai_opt.quantization.ModuleQuantizerConfig</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">presets</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="coreai_opt.quantization.ModuleQuantizerConfig.presets.w4.html">w4</a></li>

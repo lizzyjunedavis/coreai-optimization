@@ -73,6 +73,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_quantization.html">Applying quantization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_palettization.html">Applying palettization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_palettization_and_activation_quantization.html">Applying joint palettization and activation quantization to an MNIST model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_pruning.html">Applying magnitude pruning to an MNIST model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/model_examples.html">Model Examples</a><ul>
@@ -97,15 +98,25 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../../palettization/config.html">Config API</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../pruning/index.html">Pruning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/config.html">Config API</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Other Workflows and Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/joint_compression.html">Joint Compression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/mixed_precision.html">Mixed-Precision Compression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/activation_comparison.html">Comparing Intermediate Activations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/casting.html">16-bit PyTorch Model Casting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/coreai_compression.html">Compressing Core AI Models</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Debugging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../debugging/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugging/graph_mode_troubleshooting.html">Graph Mode Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
 <ul class="current">
@@ -178,6 +189,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="coreai_opt.pruning.spec.Unstructured.html">coreai_opt.pruning.spec.Unstructured</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coreai_opt.pruning.spec.default_weight_pruning_spec.html">coreai_opt.pruning.spec.default_weight_pruning_spec</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coreai_opt.quantization.ExecutionMode.html">coreai_opt.quantization.ExecutionMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coreai_opt.quantization.InvalidExecutionModeError.html">coreai_opt.quantization.InvalidExecutionModeError</a></li>
 <li class="toctree-l2"><a class="reference internal" href="coreai_opt.quantization.ModuleQuantizerConfig.html">coreai_opt.quantization.ModuleQuantizerConfig</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="coreai_opt.quantization.ModuleQuantizerConfig.presets.html">presets</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="coreai_opt.quantization.ModuleQuantizerConfig.presets.w4.html">w4</a></li>
@@ -239,7 +251,11 @@ data-aria-dark="Switch to auto color mode">
       <i class="i-lucide close"></i>
     </button>
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
-<li><a class="reference internal" href="#coreai_opt.CoreMLExportError"><code class="docutils literal notranslate"><span class="pre">CoreMLExportError</span></code></a></li>
+<li><a class="reference internal" href="#coreai_opt.CoreMLExportError"><code class="docutils literal notranslate"><span class="pre">CoreMLExportError</span></code></a><ul>
+<li><a class="reference internal" href="#coreai_opt.CoreMLExportError.from_config"><code class="docutils literal notranslate">from_config()</span></code></a></li>
+<li><a class="reference internal" href="#coreai_opt.CoreMLExportError.from_dtype"><code class="docutils literal notranslate">from_dtype()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
@@ -309,9 +325,38 @@ data-aria-dark="Switch to auto color mode">
 <h1>coreai_opt.CoreMLExportError<a class="headerlink" href="#coreai-opt-coremlexporterror" title="Link to this heading">¶</a></h1>
 <dl class="py exception">
 <dt class="sig sig-object py" id="coreai_opt.CoreMLExportError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coreai_opt.</span></span><span class="sig-name descname"><span class="pre">CoreMLExportError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/coreai_opt/common.html#CoreMLExportError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coreai_opt.CoreMLExportError" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">coreai_opt.</span></span><span class="sig-name descname"><span class="pre">CoreMLExportError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/coreai_opt/common.html#CoreMLExportError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coreai_opt.CoreMLExportError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
 <p>Raised when a model cannot be exported to the CoreML backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="coreai_opt.CoreMLExportError.from_config">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/coreai_opt/common.html#CoreMLExportError.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coreai_opt.CoreMLExportError.from_config" title="Link to this definition">¶</a></dt>
+<dd><p>Build the error for an unsupported quantization config attribute (e.g. granularity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>object</em>)</p></li>
+<li><p><strong>context</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#coreai_opt.CoreMLExportError" title="coreai_opt.common.CoreMLExportError"><em>CoreMLExportError</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="coreai_opt.CoreMLExportError.from_dtype">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dtype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/coreai_opt/common.html#CoreMLExportError.from_dtype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#coreai_opt.CoreMLExportError.from_dtype" title="Link to this definition">¶</a></dt>
+<dd><p>Build the error for an unsupported weight/activation/LUT dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -320,9 +365,11 @@ data-aria-dark="Switch to auto color mode">
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dd class="field-even"><p><a class="reference internal" href="#coreai_opt.CoreMLExportError" title="coreai_opt.common.CoreMLExportError"><em>CoreMLExportError</em></a></p>
 </dd>
 </dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

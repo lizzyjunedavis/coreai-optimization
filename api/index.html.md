@@ -4,9 +4,9 @@
 
 coreai_opt - A library for PyTorch model compression and optimizations.
 
-| [`coreai_opt.CoreMLExportError`](generated/coreai_opt.CoreMLExportError.md#coreai_opt.CoreMLExportError)(dtype, context)   | Raised when a model cannot be exported to the CoreML backend.   |
-|----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
-| [`coreai_opt.ExportBackend`](generated/coreai_opt.ExportBackend.md#coreai_opt.ExportBackend)(value, \*args, \*\*kwargs)    | Enum representing supported model export backends.              |
+| [`coreai_opt.CoreMLExportError`](generated/coreai_opt.CoreMLExportError.md#coreai_opt.CoreMLExportError)(message)       | Raised when a model cannot be exported to the CoreML backend.   |
+|-------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| [`coreai_opt.ExportBackend`](generated/coreai_opt.ExportBackend.md#coreai_opt.ExportBackend)(value, \*args, \*\*kwargs) | Enum representing supported model export backends.              |
 
 ## coreai_opt.casting
 
@@ -133,12 +133,13 @@ Pruning spec components: specs, schemes, and parametrizations.
 
 Quantization compressor, configuration, specs, and granularity classes.
 
-| [`coreai_opt.quantization.ExecutionMode`](generated/coreai_opt.quantization.ExecutionMode.md#coreai_opt.quantization.ExecutionMode)(value, ...)             | Enum representing quantization execution modes.                                                         |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| [`coreai_opt.quantization.ModuleQuantizerConfig`](generated/coreai_opt.quantization.ModuleQuantizerConfig.md#coreai_opt.quantization.ModuleQuantizerConfig) | Configuration class for quantization at the module level.                                               |
-| [`coreai_opt.quantization.QuantizationSpec`](generated/coreai_opt.quantization.QuantizationSpec.md#coreai_opt.quantization.QuantizationSpec)                | Specification for quantizing tensors in neural networks.                                                |
-| [`coreai_opt.quantization.Quantizer`](generated/coreai_opt.quantization.Quantizer.md#coreai_opt.quantization.Quantizer)(model[, ...])                       | Unified quantizer API that provides a single entry point for various quantization workflows, including: |
-| [`coreai_opt.quantization.QuantizerConfig`](generated/coreai_opt.quantization.QuantizerConfig.md#coreai_opt.quantization.QuantizerConfig)                   | Top-level configuration class for quantization.                                                         |
+| [`coreai_opt.quantization.ExecutionMode`](generated/coreai_opt.quantization.ExecutionMode.md#coreai_opt.quantization.ExecutionMode)(value, ...)                              | Enum representing quantization execution modes.                                                         |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| [`coreai_opt.quantization.InvalidExecutionModeError`](generated/coreai_opt.quantization.InvalidExecutionModeError.md#coreai_opt.quantization.InvalidExecutionModeError)(...) | Raised when an execution mode is not a recognized ExecutionMode value.                                  |
+| [`coreai_opt.quantization.ModuleQuantizerConfig`](generated/coreai_opt.quantization.ModuleQuantizerConfig.md#coreai_opt.quantization.ModuleQuantizerConfig)                  | Configuration class for quantization at the module level.                                               |
+| [`coreai_opt.quantization.QuantizationSpec`](generated/coreai_opt.quantization.QuantizationSpec.md#coreai_opt.quantization.QuantizationSpec)                                 | Specification for quantizing tensors in neural networks.                                                |
+| [`coreai_opt.quantization.Quantizer`](generated/coreai_opt.quantization.Quantizer.md#coreai_opt.quantization.Quantizer)(model[, ...])                                        | Unified quantizer API that provides a single entry point for various quantization workflows, including: |
+| [`coreai_opt.quantization.QuantizerConfig`](generated/coreai_opt.quantization.QuantizerConfig.md#coreai_opt.quantization.QuantizerConfig)                                    | Top-level configuration class for quantization.                                                         |
 
 ### coreai_opt.quantization.config
 

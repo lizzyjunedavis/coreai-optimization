@@ -2,7 +2,7 @@
 <html lang="en" data-accent-color="indigo" data-content_root="../">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Overview - CoreAI-Opt main documentation</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>API Overview - CoreAI-Opt main documentation</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Config API" href="config.html" /><link rel="prev" title="Basics" href="basics.html" /><script>
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d88b86f9" />
@@ -73,6 +73,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_quantization.html">Applying quantization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_palettization.html">Applying palettization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_palettization_and_activation_quantization.html">Applying joint palettization and activation quantization to an MNIST model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_pruning.html">Applying magnitude pruning to an MNIST model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/model_examples.html">Model Examples</a><ul>
@@ -83,7 +84,7 @@ data-aria-dark="Switch to auto color mode">
 </li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Core Algorithms and APIs</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quantization/index.html">Quantization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../quantization/basics.html">Basics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quantization/overview.html">API Overview</a></li>
@@ -97,15 +98,25 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../palettization/config.html">Config API</a></li>
 </ul>
 </li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Pruning</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basics.html">Basics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">Config API</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Other Workflows and Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../utils/joint_compression.html">Joint Compression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/mixed_precision.html">Mixed-Precision Compression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utils/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/activation_comparison.html">Comparing Intermediate Activations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/casting.html">16-bit PyTorch Model Casting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/coreai_compression.html">Compressing Core AI Models</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Debugging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../debugging/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debugging/graph_mode_troubleshooting.html">Graph Mode Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
 <ul>
@@ -178,6 +189,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.pruning.spec.Unstructured.html">coreai_opt.pruning.spec.Unstructured</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.pruning.spec.default_weight_pruning_spec.html">coreai_opt.pruning.spec.default_weight_pruning_spec</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ExecutionMode.html">coreai_opt.quantization.ExecutionMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.quantization.InvalidExecutionModeError.html">coreai_opt.quantization.InvalidExecutionModeError</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.html">coreai_opt.quantization.ModuleQuantizerConfig</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.presets.html">presets</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.presets.w4.html">w4</a></li>
@@ -258,8 +270,12 @@ data-aria-dark="Switch to auto color mode">
         <span>/</span>
         <meta itemprop="position" content="1" />
       </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <strong itemprop="name">API Overview</strong>
+        <a itemprop="item" href="index.html"><span itemprop="name">Pruning</span></a>
+        <span>/</span>
         <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">API Overview</strong>
+        <meta itemprop="position" content="3" />
       </li></ol>
     <div class="xl:hidden ml-1">
       <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
@@ -397,7 +413,21 @@ data-aria-dark="Switch to auto color mode">
     <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
   </svg>
   <span>Back to top</span>
-</button><div class="navigation flex print:hidden"></div></div>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="basics.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Basics</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="config.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Config API</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
     </div>
   </main>
 </div>

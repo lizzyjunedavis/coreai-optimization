@@ -73,6 +73,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_quantization.html">Applying quantization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_palettization.html">Applying palettization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_palettization_and_activation_quantization.html">Applying joint palettization and activation quantization to an MNIST model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/mnist_pruning.html">Applying magnitude pruning to an MNIST model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples/model_examples.html">Model Examples</a><ul>
@@ -97,15 +98,25 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../../palettization/config.html">Config API</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../pruning/index.html">Pruning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pruning/config.html">Config API</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Other Workflows and Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/joint_compression.html">Joint Compression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/mixed_precision.html">Mixed-Precision Compression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/activation_comparison.html">Comparing Intermediate Activations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/casting.html">16-bit PyTorch Model Casting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/coreai_compression.html">Compressing Core AI Models</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Debugging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../debugging/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../debugging/graph_mode_troubleshooting.html">Graph Mode Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
 <ul>
@@ -178,6 +189,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../../api/generated/coreai_opt.pruning.spec.Unstructured.html">coreai_opt.pruning.spec.Unstructured</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/generated/coreai_opt.pruning.spec.default_weight_pruning_spec.html">coreai_opt.pruning.spec.default_weight_pruning_spec</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/generated/coreai_opt.quantization.ExecutionMode.html">coreai_opt.quantization.ExecutionMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/generated/coreai_opt.quantization.InvalidExecutionModeError.html">coreai_opt.quantization.InvalidExecutionModeError</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.html">coreai_opt.quantization.ModuleQuantizerConfig</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.presets.html">presets</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.presets.w4.html">w4</a></li>
@@ -479,11 +491,24 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="163"><span class="k">class</span><span class="w"> </span><span class="nc">CoreMLExportError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
 </span><span data-line="164"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a model cannot be exported to the CoreML backend.&quot;&quot;&quot;</span>
 </span><span data-line="165">
-</span><span data-line="166">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span data-line="167">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-</span><span data-line="168">            <span class="sa">f</span><span class="s2">&quot;CoreML export does not support dtype </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">. &quot;</span>
-</span><span data-line="169">            <span class="sa">f</span><span class="s2">&quot;Use backend=ExportBackend.CoreAI instead.&quot;</span>
-</span><span data-line="170">        <span class="p">)</span></div>
+</span><span data-line="166">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="167">        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2"> Use backend=ExportBackend.CoreAI instead.&quot;</span><span class="p">)</span>
+</span><span data-line="168">
+<div class="viewcode-block" id="CoreMLExportError.from_dtype">
+<a class="viewcode-back" href="../../api/generated/coreai_opt.CoreMLExportError.html#coreai_opt.CoreMLExportError.from_dtype">[docs]</a>
+</span><span data-line="169">    <span class="nd">@classmethod</span>
+</span><span data-line="170">    <span class="k">def</span><span class="w"> </span><span class="nf">from_dtype</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CoreMLExportError</span><span class="p">:</span>
+</span><span data-line="171"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the error for an unsupported weight/activation/LUT dtype.&quot;&quot;&quot;</span>
+</span><span data-line="172">        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CoreML export does not support dtype </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+</span><span data-line="173">
+<div class="viewcode-block" id="CoreMLExportError.from_config">
+<a class="viewcode-back" href="../../api/generated/coreai_opt.CoreMLExportError.html#coreai_opt.CoreMLExportError.from_config">[docs]</a>
+</span><span data-line="174">    <span class="nd">@classmethod</span>
+</span><span data-line="175">    <span class="k">def</span><span class="w"> </span><span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CoreMLExportError</span><span class="p">:</span>
+</span><span data-line="176"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the error for an unsupported quantization config attribute (e.g. granularity).&quot;&quot;&quot;</span>
+</span><span data-line="177">        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CoreML export does not support </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+</div>
 
 </span></pre></div>
         </article><button class="back-to-top" type="button">

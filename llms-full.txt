@@ -6,15 +6,15 @@
 
 ## What is `coreai-opt`?
 
-`coreai-opt` is a Python library for compressing PyTorch models for deployment on Apple Silicon. It allows you to apply compression-based optimizations (such as quantization or palettization) to any PyTorch model, producing a transformed PyTorch model that can be converted to a Core AI model and run with the [Core AI](https://developer.apple.com/documentation/coreai) framework.
+`coreai-opt` is a Python library for compressing PyTorch models for deployment on Apple silicon. It applies compression-based optimizations (such as quantization or palettization) to any PyTorch model, producing a transformed PyTorch model that can be converted to a Core AI model and run with the [Core AI](https://developer.apple.com/documentation/coreai) framework. For an overview of the Core AI ecosystem and how coreai-opt fits in, see [What is Core AI?](#what-is-core-ai).
 
-Model compression can help reduce the memory footprint of your model (disk size and at runtime), reduce inference latency, reduce power consumption, or optimize them all at once.
+Model compression can help reduce the memory footprint of a model (disk size and at runtime), reduce inference latency, reduce power consumption, or optimize them all at once.
 
 `coreai-opt` is built around the following ideas:
 
-- **PyTorch native.** All APIs operate on PyTorch models. Compression is another transformation in your PyTorch workflow. The output of every compressor is itself a PyTorch model that can be validated, fine-tuned, and exported like any other model.
+- **PyTorch native.** All APIs operate on PyTorch models. Compression is another transformation in a PyTorch workflow. The output of every compressor is itself a PyTorch model that can be validated, fine-tuned, and exported like any other model.
 - **Integrates with existing PyTorch code.** Adding post-training compression, calibration-based, or compression-aware training to an existing PyTorch pipeline takes a few additional lines of code. All three use the same compressor object.
-- **Aligned with Apple Silicon.** Default configurations and the majority of the available optimization options align with what the [Core AI](https://developer.apple.com/documentation/coreai) runtime executes efficiently, on one or many of the Apple Silicon platforms. Compressed PyTorch models can be seamlessly converted to `.aimodel` for deployment via Core AI.
+- **Aligned with Apple silicon.** Default configurations and the majority of the available optimization options align with what the [Core AI](https://developer.apple.com/documentation/coreai) runtime executes efficiently, on one or many of the Apple silicon platforms. Compressed PyTorch models can be seamlessly converted to `.aimodel` for deployment via Core AI.
 
 ## Types of compression
 
@@ -32,9 +32,9 @@ The process of applying compression to a model typically involves the following 
 
 - **Data-free compression**: Weight-only compression that needs only the model — no calibration or training data. (Test data and an evaluation metric are still used to validate the result.) The fastest workflow — typically seconds to minutes even for large models. Often works well for reducing the model down to 8 bits, or even 6 or 4 bits, with only a slight decrease in accuracy. Typical approaches used for getting more aggressive compression, effective bits-per-weight (bpw) < 5 bits, involve using more granular compression (e.g. per-block quantization, per-grouped-channel palettization) and/or mixed-bit compression (assigning different bits to different weights, based on their effect on accuracy).
 - **Calibration-based compression**: Post-training compression with calibration data. Often used when quantizing activations. A small amount of representative data (e.g. ~128 samples) lets compressors observe activation ranges and weight sensitivities.
-- **Fine-tuning-based compression**: Compression-aware fine-tuning (e.g. quantization-aware training) with full training data. The compressor is integrated into your training loop so the model adapts to compression error as it trains. The most time-intensive workflow, but typically the only way to recover accuracy at the most aggressive compression ratios for weights (4 bits and below), and/or for models that are sensitive to activation quantization.
+- **Fine-tuning-based compression**: Compression-aware fine-tuning (e.g. quantization-aware training) with full training data. The compressor is integrated into the training loop so the model adapts to compression error as it trains. The most time-intensive workflow, but typically the only way to recover accuracy at the most aggressive compression ratios for weights (4 bits and below), and/or for models that are sensitive to activation quantization.
 
-`coreai-opt`’s APIs allow you to easily move from one stage to the next while evaluating accuracy after each stage and escalating to a more expensive workflow only when needed.
+`coreai-opt`’s APIs make it straightforward to move from one stage to the next while evaluating accuracy after each stage and escalating to a more expensive workflow only when needed.
 
 ## Getting started
 
@@ -42,11 +42,19 @@ For an overview of the generic structure of `coreai-opt` APIs, see [How to use c
 
 For end-to-end examples on API usage and common workflows, see [MNIST examples](examples/toy_models.md) and [model examples](examples/model_examples.md).
 
-## Links to related Core AI components
+## What is Core AI?
 
-- **[coreai-torch](https://github.com/apple/coreai-torch)** — Python library for converting PyTorch models to the Core AI (`.aimodel`) format.
-- **[coreai-models](https://github.com/apple/coreai-models)** — GitHub repository with example models demonstrating how to convert, optimize, and re-author models for deployment with Core AI. Several of the LLMs in there are compressed to ~4–5 bits using `coreai-opt`. The repo also contains a number of AI skills, including some that wrap `coreai-opt` workflows.
-- **[Core AI framework](https://developer.apple.com/documentation/coreai)** — Apple’s on-device AI framework that runs `.aimodel` models.
+Core AI is a set of technologies for deploying machine learning models on Apple hardware, covering the full model deployment lifecycle: from model optimization and conversion, to debugging, to app integration. Models run entirely on device on Apple silicon, with no server required.
+
+![Diagram of the Core AI ecosystem. At the top, Core AI Models provides ready-to-use models and examples. Core AI Optimization and Core AI PyTorch Extensions prepare models for deployment, producing a .aimodel file. Core AI Debugger and Xcode support integration and debugging. Core AI Framework runs models on device.](_images/core-ai-ecosystem.png)
+
+The Core AI ecosystem consists of the following components:
+
+- Convert PyTorch models to the Core AI model format (`.aimodel`) using [Core AI PyTorch Extensions](https://github.com/apple/coreai-torch)
+- Compress models with quantization, palettization, and pruning using [Core AI Optimization](https://github.com/apple/coreai-optimization)
+- Load and run models in an app with the [Core AI Framework](https://developer.apple.com/documentation/coreai)
+- Inspect, debug, and profile models using [Core AI Debugger](https://developer.apple.com/documentation/coreai/inspecting-debugging-and-profiling-core-ai-models)
+- Get popular open-source models with conversion, optimization, and Swift app integration code using [Core AI Models](https://github.com/apple/coreai-models)
 
 
 # index.html.md
@@ -100,9 +108,9 @@ For end-to-end examples on API usage and common workflows, see [MNIST examples](
 
 coreai_opt - A library for PyTorch model compression and optimizations.
 
-| [`coreai_opt.CoreMLExportError`](generated/coreai_opt.CoreMLExportError.md#coreai_opt.CoreMLExportError)(dtype, context)   | Raised when a model cannot be exported to the CoreML backend.   |
-|----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
-| [`coreai_opt.ExportBackend`](generated/coreai_opt.ExportBackend.md#coreai_opt.ExportBackend)(value, \*args, \*\*kwargs)    | Enum representing supported model export backends.              |
+| [`coreai_opt.CoreMLExportError`](generated/coreai_opt.CoreMLExportError.md#coreai_opt.CoreMLExportError)(message)       | Raised when a model cannot be exported to the CoreML backend.   |
+|-------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| [`coreai_opt.ExportBackend`](generated/coreai_opt.ExportBackend.md#coreai_opt.ExportBackend)(value, \*args, \*\*kwargs) | Enum representing supported model export backends.              |
 
 ## coreai_opt.casting
 
@@ -229,12 +237,13 @@ Pruning spec components: specs, schemes, and parametrizations.
 
 Quantization compressor, configuration, specs, and granularity classes.
 
-| [`coreai_opt.quantization.ExecutionMode`](generated/coreai_opt.quantization.ExecutionMode.md#coreai_opt.quantization.ExecutionMode)(value, ...)             | Enum representing quantization execution modes.                                                         |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
-| [`coreai_opt.quantization.ModuleQuantizerConfig`](generated/coreai_opt.quantization.ModuleQuantizerConfig.md#coreai_opt.quantization.ModuleQuantizerConfig) | Configuration class for quantization at the module level.                                               |
-| [`coreai_opt.quantization.QuantizationSpec`](generated/coreai_opt.quantization.QuantizationSpec.md#coreai_opt.quantization.QuantizationSpec)                | Specification for quantizing tensors in neural networks.                                                |
-| [`coreai_opt.quantization.Quantizer`](generated/coreai_opt.quantization.Quantizer.md#coreai_opt.quantization.Quantizer)(model[, ...])                       | Unified quantizer API that provides a single entry point for various quantization workflows, including: |
-| [`coreai_opt.quantization.QuantizerConfig`](generated/coreai_opt.quantization.QuantizerConfig.md#coreai_opt.quantization.QuantizerConfig)                   | Top-level configuration class for quantization.                                                         |
+| [`coreai_opt.quantization.ExecutionMode`](generated/coreai_opt.quantization.ExecutionMode.md#coreai_opt.quantization.ExecutionMode)(value, ...)                              | Enum representing quantization execution modes.                                                         |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| [`coreai_opt.quantization.InvalidExecutionModeError`](generated/coreai_opt.quantization.InvalidExecutionModeError.md#coreai_opt.quantization.InvalidExecutionModeError)(...) | Raised when an execution mode is not a recognized ExecutionMode value.                                  |
+| [`coreai_opt.quantization.ModuleQuantizerConfig`](generated/coreai_opt.quantization.ModuleQuantizerConfig.md#coreai_opt.quantization.ModuleQuantizerConfig)                  | Configuration class for quantization at the module level.                                               |
+| [`coreai_opt.quantization.QuantizationSpec`](generated/coreai_opt.quantization.QuantizationSpec.md#coreai_opt.quantization.QuantizationSpec)                                 | Specification for quantizing tensors in neural networks.                                                |
+| [`coreai_opt.quantization.Quantizer`](generated/coreai_opt.quantization.Quantizer.md#coreai_opt.quantization.Quantizer)(model[, ...])                                        | Unified quantizer API that provides a single entry point for various quantization workflows, including: |
+| [`coreai_opt.quantization.QuantizerConfig`](generated/coreai_opt.quantization.QuantizerConfig.md#coreai_opt.quantization.QuantizerConfig)                                    | Top-level configuration class for quantization.                                                         |
 
 ### coreai_opt.quantization.config
 
@@ -1426,7 +1435,7 @@ The defaults are:
 
 In [Quantization Overview](overview.md) we saw how to use the default `W_INT8_A_INT8` config. [Config classes and their defaults](#config-classes-and-their-defaults) described the default settings in `QuantizerConfig()`, `ModuleQuantizerConfig()`, and `OpQuantizerConfig()`. Let us now see how to configure quantization when non-default settings are desired.
 
-Several examples below configure specific module names, module types, op names, or op types. To determine these for your model, see [Inspecting Model Structure](../utils/model_inspection.md).
+Several examples below configure specific module names, module types, op names, or op types. To determine these for your model, see [Inspecting Model Structure](../debugging/model_inspection.md).
 
 ### Example: `W_MXFP4_A_FP8` applied to all supported ops
 
@@ -2050,7 +2059,7 @@ inspector = ModelInspector(
 print(inspector.format_summary())
 ```
 
-See [Inspecting Model Structure](../utils/model_inspection.md) for full usage, examples, and a comparison of graph and eager mode op naming.
+See [Inspecting Model Structure](../debugging/model_inspection.md) for full usage, examples, and a comparison of graph and eager mode op naming.
 
 
 # config.html.md
@@ -2350,7 +2359,7 @@ op_config = OpKMeansPalettizerConfig(
 
 ## Examples
 
-Several examples below configure specific module types or module names. To determine these for your model, use [`ModelInspector`](../api/generated/coreai_opt.inspection.ModelInspector.md#coreai_opt.inspection.ModelInspector) with `execution_mode="eager"` — see [Inspecting Model Structure](../utils/model_inspection.md). Palettization supports eager mode only.
+Several examples below configure specific module types or module names. To determine these for your model, use [`ModelInspector`](../api/generated/coreai_opt.inspection.ModelInspector.md#coreai_opt.inspection.ModelInspector) with `execution_mode="eager"` — see [Inspecting Model Structure](../debugging/model_inspection.md). Palettization supports eager mode only.
 
 ### Apply 4-bit palettization globally, 8-bit to linear layers
 
@@ -2601,17 +2610,36 @@ compressed_program = sparsify_weights(
 
 # coreai_opt.CoreMLExportError
 
-### *exception* coreai_opt.CoreMLExportError(dtype, context)
+### *exception* coreai_opt.CoreMLExportError(message)
 
 Bases: `ValueError`
 
 Raised when a model cannot be exported to the CoreML backend.
 
 * **Parameters:**
+  **message** (*str*)
+* **Return type:**
+  None
+
+#### *classmethod* from_config(config, context)
+
+Build the error for an unsupported quantization config attribute (e.g. granularity).
+
+* **Parameters:**
+  * **config** (*object*)
+  * **context** (*str*)
+* **Return type:**
+  [*CoreMLExportError*](#coreai_opt.CoreMLExportError)
+
+#### *classmethod* from_dtype(dtype, context)
+
+Build the error for an unsupported weight/activation/LUT dtype.
+
+* **Parameters:**
   * **dtype** (*Any*)
   * **context** (*str*)
 * **Return type:**
-  None
+  [*CoreMLExportError*](#coreai_opt.CoreMLExportError)
 
 
 # coreai_opt.ExportBackend.html.md
@@ -5639,6 +5667,22 @@ exportable.
 Deprecated. Use `ExecutionMode.GRAPH` instead.
 
 
+# coreai_opt.quantization.InvalidExecutionModeError.html.md
+
+# coreai_opt.quantization.InvalidExecutionModeError
+
+### *exception* coreai_opt.quantization.InvalidExecutionModeError(execution_mode)
+
+Bases: `ValueError`
+
+Raised when an execution mode is not a recognized ExecutionMode value.
+
+* **Parameters:**
+  **execution_mode** (*object*)
+* **Return type:**
+  None
+
+
 # coreai_opt.quantization.ModuleQuantizerConfig.html.md
 
 # coreai_opt.quantization.ModuleQuantizerConfig
@@ -8118,6 +8162,100 @@ Users may also consider:
 - Using [Sensitive K-Means](../palettization/overview.md#sensitive-k-means-api) calibration to place centroids near weight values that matter most for output quality
 
 
+# graph_mode_troubleshooting.html.md
+
+# Graph Mode Troubleshooting
+
+This guide helps debug common issues when using [Graph execution mode](../quantization/overview.md#two-execution-modes-graph-and-eager) in CoreAI-Opt.
+
+A `quantizer.prepare()` failure in graph mode happens in one of two stages, and the fix differs sharply between them. The first thing to do is figure out **which** stage is failing.
+
+## Step 1: Diagnose — does `torch.export.export` succeed?
+
+`Quantizer.prepare()` first calls `torch.export.export` to trace the model into an FX graph, then applies quantization annotations on the resulting graph and runs `torchao`’s `prepare_qat_pt2e`. To localize the failure, run the export step directly with the same arguments `prepare()` would use:
+
+```python
+import torch
+
+with torch.no_grad():  # matches export_with_no_grad=True (the prepare() default)
+    exported_program = torch.export.export(model, example_inputs)
+```
+
+The result of this experiment determines which path to follow:
+
+- **Export fails.** Go to [If torch.export.export fails](#if-torch-export-export-fails). The model isn’t `torch.export`-compatible as written; the workarounds in Steps 2-3 may help.
+- **Export succeeds but `prepare()` still fails.** Go to [If prepare() fails after a successful export](#if-prepare-fails-after-a-successful-export).
+
+## If `torch.export.export` fails
+
+### Step 2: Try `export_with_no_grad=False`
+
+The default `export_with_no_grad=True` wraps the export call in `torch.no_grad()`. For some models, this context modifies tracing behavior and causes guard failures.
+
+```python
+prepared = quantizer.prepare(
+    example_inputs=(input_tensor,),
+    export_with_no_grad=False,
+)
+```
+
+### Step 3: Use dynamic shapes for shape-related errors
+
+If the error mentions shape constraints, guards, or symbolic dimensions, the model likely has inputs with variable dimensions (e.g., sequence length, batch size). Specify `dynamic_shapes` to tell the exporter which dimensions can vary:
+
+```python
+from torch.export.dynamic_shapes import Dim
+
+# Example: dynamic batch dimension
+prepared = quantizer.prepare(
+    example_inputs=(input_tensor,),
+    dynamic_shapes={"x": (Dim.AUTO, Dim.STATIC, Dim.STATIC, Dim.STATIC)},
+)
+
+# Example: dynamic sequence length with a max constraint
+import torch.export
+
+dynamic_shapes = {
+    "input_ids": {1: torch.export.Dim("seq_len", max=2048)},
+    "attention_mask": {1: torch.export.Dim("seq_len", max=2048)},
+}
+prepared = quantizer.prepare(
+    example_inputs=(input_ids, attention_mask),
+    dynamic_shapes=dynamic_shapes,
+)
+```
+
+For full details on dynamic shapes, see the [PyTorch Export Tutorial – Dynamic Shapes](https://docs.pytorch.org/tutorials/intermediate/torch_export_tutorial.html#constraints-dynamic-shapes).
+
+If Steps 2-3 don’t resolve the export failure (e.g., the model has data-dependent control flow that `torch.export` cannot capture), the model definition itself may need to change to become exportable — this is worth fixing at the source, since the same construct can also block conversion via [coreai-torch](https://github.com/apple/coreai-torch) later on. Otherwise, see [Fall back to EAGER execution mode](#fall-back-to-eager-execution-mode) below.
+
+## If `prepare()` fails after a successful export
+
+After `torch.export.export` returns, `Quantizer.prepare()` applies coreai-opt’s annotation pass and then calls into torch’s `prepare_qat_pt2e` API. If the error you’re seeing comes from `prepare_qat_pt2e` itself, it is a torch-side issue — refer to the [`torchao` documentation](https://docs.pytorch.org/ao/stable/).
+
+If the error does **not** come from `prepare_qat_pt2e` (i.e. it originates inside coreai-opt’s annotation pass), it likely indicates a bug in coreai-opt. **Please file an issue on GitHub** with the error message and a minimal reproducer. In the meantime, [fall back to eager mode](#fall-back-to-eager-execution-mode) below — eager bypasses the entire graph-mode pipeline.
+
+## Fall back to EAGER execution mode
+
+EAGER mode bypasses `torch.export` entirely and uses runtime tracing instead. It is the common fallback for both export failures that can’t be worked around with Steps 2-3 and post-export `prepare()` failures.
+
+```python
+from coreai_opt.quantization import ExecutionMode
+
+config = QuantizerConfig.presets.w8()
+config.execution_mode = ExecutionMode.EAGER
+quantizer = Quantizer(model, config)
+prepared = quantizer.prepare(example_inputs=(input_tensor,))
+```
+
+See [Choosing between graph and eager mode](../quantization/overview.md#choosing-between-graph-and-eager-mode) for the trade-offs between the two modes.
+
+## External Resources
+
+- [PyTorch Export Tutorial](https://docs.pytorch.org/tutorials/intermediate/torch_export_tutorial.html)
+- [Dynamic Shapes](https://docs.pytorch.org/tutorials/intermediate/torch_export_tutorial.html#constraints-dynamic-shapes)
+
+
 # how_to_use_coreaiopt.html.md
 
 # How to use coreai-opt
@@ -8402,15 +8540,15 @@ final_model = quantizer.finalize(backend=opt.ExportBackend.CoreAI)
 
 ## What is `coreai-opt`?
 
-`coreai-opt` is a Python library for compressing PyTorch models for deployment on Apple Silicon. It allows you to apply compression-based optimizations (such as quantization or palettization) to any PyTorch model, producing a transformed PyTorch model that can be converted to a Core AI model and run with the [Core AI](https://developer.apple.com/documentation/coreai) framework.
+`coreai-opt` is a Python library for compressing PyTorch models for deployment on Apple silicon. It applies compression-based optimizations (such as quantization or palettization) to any PyTorch model, producing a transformed PyTorch model that can be converted to a Core AI model and run with the [Core AI](https://developer.apple.com/documentation/coreai) framework. For an overview of the Core AI ecosystem and how coreai-opt fits in, see [What is Core AI?](#what-is-core-ai).
 
-Model compression can help reduce the memory footprint of your model (disk size and at runtime), reduce inference latency, reduce power consumption, or optimize them all at once.
+Model compression can help reduce the memory footprint of a model (disk size and at runtime), reduce inference latency, reduce power consumption, or optimize them all at once.
 
 `coreai-opt` is built around the following ideas:
 
-- **PyTorch native.** All APIs operate on PyTorch models. Compression is another transformation in your PyTorch workflow. The output of every compressor is itself a PyTorch model that can be validated, fine-tuned, and exported like any other model.
+- **PyTorch native.** All APIs operate on PyTorch models. Compression is another transformation in a PyTorch workflow. The output of every compressor is itself a PyTorch model that can be validated, fine-tuned, and exported like any other model.
 - **Integrates with existing PyTorch code.** Adding post-training compression, calibration-based, or compression-aware training to an existing PyTorch pipeline takes a few additional lines of code. All three use the same compressor object.
-- **Aligned with Apple Silicon.** Default configurations and the majority of the available optimization options align with what the [Core AI](https://developer.apple.com/documentation/coreai) runtime executes efficiently, on one or many of the Apple Silicon platforms. Compressed PyTorch models can be seamlessly converted to `.aimodel` for deployment via Core AI.
+- **Aligned with Apple silicon.** Default configurations and the majority of the available optimization options align with what the [Core AI](https://developer.apple.com/documentation/coreai) runtime executes efficiently, on one or many of the Apple silicon platforms. Compressed PyTorch models can be seamlessly converted to `.aimodel` for deployment via Core AI.
 
 ## Types of compression
 
@@ -8428,9 +8566,9 @@ The process of applying compression to a model typically involves the following 
 
 - **Data-free compression**: Weight-only compression that needs only the model — no calibration or training data. (Test data and an evaluation metric are still used to validate the result.) The fastest workflow — typically seconds to minutes even for large models. Often works well for reducing the model down to 8 bits, or even 6 or 4 bits, with only a slight decrease in accuracy. Typical approaches used for getting more aggressive compression, effective bits-per-weight (bpw) < 5 bits, involve using more granular compression (e.g. per-block quantization, per-grouped-channel palettization) and/or mixed-bit compression (assigning different bits to different weights, based on their effect on accuracy).
 - **Calibration-based compression**: Post-training compression with calibration data. Often used when quantizing activations. A small amount of representative data (e.g. ~128 samples) lets compressors observe activation ranges and weight sensitivities.
-- **Fine-tuning-based compression**: Compression-aware fine-tuning (e.g. quantization-aware training) with full training data. The compressor is integrated into your training loop so the model adapts to compression error as it trains. The most time-intensive workflow, but typically the only way to recover accuracy at the most aggressive compression ratios for weights (4 bits and below), and/or for models that are sensitive to activation quantization.
+- **Fine-tuning-based compression**: Compression-aware fine-tuning (e.g. quantization-aware training) with full training data. The compressor is integrated into the training loop so the model adapts to compression error as it trains. The most time-intensive workflow, but typically the only way to recover accuracy at the most aggressive compression ratios for weights (4 bits and below), and/or for models that are sensitive to activation quantization.
 
-`coreai-opt`’s APIs allow you to easily move from one stage to the next while evaluating accuracy after each stage and escalating to a more expensive workflow only when needed.
+`coreai-opt`’s APIs make it straightforward to move from one stage to the next while evaluating accuracy after each stage and escalating to a more expensive workflow only when needed.
 
 ## Getting started
 
@@ -8438,11 +8576,19 @@ For an overview of the generic structure of `coreai-opt` APIs, see [How to use c
 
 For end-to-end examples on API usage and common workflows, see [MNIST examples](examples/toy_models.md) and [model examples](examples/model_examples.md).
 
-## Links to related Core AI components
+## What is Core AI?
 
-- **[coreai-torch](https://github.com/apple/coreai-torch)** — Python library for converting PyTorch models to the Core AI (`.aimodel`) format.
-- **[coreai-models](https://github.com/apple/coreai-models)** — GitHub repository with example models demonstrating how to convert, optimize, and re-author models for deployment with Core AI. Several of the LLMs in there are compressed to ~4–5 bits using `coreai-opt`. The repo also contains a number of AI skills, including some that wrap `coreai-opt` workflows.
-- **[Core AI framework](https://developer.apple.com/documentation/coreai)** — Apple’s on-device AI framework that runs `.aimodel` models.
+Core AI is a set of technologies for deploying machine learning models on Apple hardware, covering the full model deployment lifecycle: from model optimization and conversion, to debugging, to app integration. Models run entirely on device on Apple silicon, with no server required.
+
+![Diagram of the Core AI ecosystem. At the top, Core AI Models provides ready-to-use models and examples. Core AI Optimization and Core AI PyTorch Extensions prepare models for deployment, producing a .aimodel file. Core AI Debugger and Xcode support integration and debugging. Core AI Framework runs models on device.](_images/core-ai-ecosystem.png)
+
+The Core AI ecosystem consists of the following components:
+
+- Convert PyTorch models to the Core AI model format (`.aimodel`) using [Core AI PyTorch Extensions](https://github.com/apple/coreai-torch)
+- Compress models with quantization, palettization, and pruning using [Core AI Optimization](https://github.com/apple/coreai-optimization)
+- Load and run models in an app with the [Core AI Framework](https://developer.apple.com/documentation/coreai)
+- Inspect, debug, and profile models using [Core AI Debugger](https://developer.apple.com/documentation/coreai/inspecting-debugging-and-profiling-core-ai-models)
+- Get popular open-source models with conversion, optimization, and Swift app integration code using [Core AI Models](https://github.com/apple/coreai-models)
 
 
 # mixed_precision.html.md
@@ -8801,6 +8947,84 @@ With both palettization and activation quantization applied, let’s measure the
 Once the jointly compressed model is ready, call `finalize()` on the quantizer to produce the final model for deployment. We export the k-means joint-compressed model to Core AI.
 
 The export proceeds in three steps: trace the model with `torch.export.export()`, cast remaining FP32 parameters to FP16 with `cast_to_16_bit_precision()`, then convert to Core AI format using `coreai-torch`.
+
+
+# mnist_pruning.html.md
+
+# Applying magnitude pruning to an MNIST model
+
+In this tutorial, we will be providing a basic introduction to pruning a model with CoreAI-Opt.
+
+After the end of this tutorial, you should be familiar with the following:
+
+1. [How to apply CoreAI-Opt’s post-training magnitude pruning](#Post-Training-Magnitude-Pruning)
+2. [How to apply CoreAI-Opt’s magnitude pruning with a sparsity schedule and fine-tuning](#Magnitude-Pruning-with-Fine-Tuning)
+3. [How to export CoreAI-Opt pruned models to Core AI](#Export-to-Core-AI)
+
+**Table of Contents:**
+
+- [Setup](#Setup)
+  - [MNIST Dataset download](#MNIST-Dataset-download)
+  - [Model definition](#Model-definition)
+  - [Training and Evaluation](#Training-and-Evaluation)
+  - [Train baseline model](#Train-baseline-model)
+- [Post-Training Magnitude Pruning](#Post-Training-Magnitude-Pruning)
+- [Magnitude Pruning with Fine-Tuning](#Magnitude-Pruning-with-Fine-Tuning)
+- [Export to Core AI](#Export-to-Core-AI)
+
+## Setup
+
+We will be using a basic CNN model and train it on the MNIST dataset and observe its final accuracy.
+
+Once we train this CNN model, we will apply magnitude pruning to it using `coreai-opt`, starting with a *post-training* pass (no fine-tuning), and then moving to a *scheduled* pass that ramps up sparsity while fine-tuning to recover accuracy.
+
+### MNIST Dataset download
+
+Helper to download the MNIST dataset with standard normalization applied.
+
+### Model definition
+
+A simple CNN with a single Conv2d → ReLU → MaxPool block, followed by Flatten and a Linear classifier.
+
+### Training and Evaluation
+
+Standard PyTorch training loop and evaluation function that computes accuracy.
+
+The CNN model used for this tutorial contains a single Conv2d, ReLU, MaxPool, Flatten, and Linear layer. Here’s the structure:
+
+### Train baseline model
+
+Let’s train this model so we can get a baseline accuracy. We save the trained weights so we can reload them for each pruning experiment.
+
+## Post-Training Magnitude Pruning
+
+Magnitude pruning sparsifies a model by zeroing out the smallest-magnitude weights, up to a `target_sparsity`. Post-training pruning applies the full sparsity in a single shot during the `prepare()` call — no calibration data or fine-tuning is required.
+
+Unless a model’s weights are already close to zero, post-training pruning will usually degrade accuracy. It’s most useful as a quick way to see the effect of sparsity before committing to a fine-tuning workflow.
+
+For this tutorial, we’ll apply 50% unstructured magnitude pruning (individual elements, not whole channels) via `PruningSpec`. Refer to the [Pruning Config](https://apple.github.io/coreai-optimization/pruning/config.html) page for all options.
+
+After calling `prepare()`, 50% of the values in each supported weight tensor are already zeroed out, so we can measure the accuracy impact immediately.
+
+## Magnitude Pruning with Fine-Tuning
+
+In most cases, fine-tuning is required to recover accuracy after pruning. Instead of applying the full sparsity in one shot, we configure a `sparsity_schedule` on the module config and call `pruner.step()` once per epoch to gradually ramp up sparsity while the model keeps training.
+
+Here we target 50% sparsity, ramped in via a `PolynomialDecaySchedule` over the 5 epochs of fine-tuning.
+
+We now fine-tune the model while incrementing the sparsity schedule. The `pruner.step()` call at the end of each epoch advances the schedule and recomputes the pruning masks against the current weight magnitudes for the next sparsity level.
+
+## Export to Core AI
+
+Once the pruned model is ready, call `finalize()` to prepare the sparsified modules for deployment. Pass `ExportBackend.CoreAI` to `finalize(backend=...)` to target the `.aimodel` format produced by `coreai-torch`.
+
+We’ll export the fine-tuned, scheduled-pruning model from the previous section.
+
+The export proceeds in three steps:
+
+- Trace the model with `torch.export.export()` to obtain a graph representation.
+- Apply `cast_to_16_bit_precision()` to cast remaining FP32 parameters to FP16 for optimal on-device performance.
+- Convert the exported program to Core AI format using `coreai-torch.TorchConverter`.
 
 
 # mnist_quantization.html.md
@@ -9406,7 +9630,7 @@ The two modes are expected to produce very similar models for weight-only quanti
 
 A few scenarios where `eager` mode may need to be used instead of `graph`:
 
-- If you run into any errors during the `prepare` call which, under the hood, invokes the `torch.export.export` and `torchao`’s `prepare_qat_pt2e`/`convert_pt2e` APIs.
+- If you run into any errors during the `prepare` call which, under the hood, invokes the `torch.export.export` and `torchao`’s `prepare_qat_pt2e`/`convert_pt2e` APIs. See [Graph Mode Troubleshooting](../debugging/graph_mode_troubleshooting.md) for common export errors and workarounds before falling back to eager mode.
 - When `torch.nn.Module` needs to be provided as an input, instead of `ExportedProgram` to the conversion API of [coreai-torch](https://github.com/apple/coreai-torch). This happens when the `coreai-torch` conversion needs to “externalize” certain sub-modules to map them to *composite ops* for better runtime performance.
 
 #### Weights and activations quantization
@@ -9850,5 +10074,6 @@ These tutorials demonstrate model compression techniques using simple toy models
 * [Applying quantization to an MNIST model](../tutorials/mnist_quantization.md)
 * [Applying palettization to an MNIST model](../tutorials/mnist_palettization.md)
 * [Applying joint palettization and activation quantization to an MNIST model](../tutorials/mnist_palettization_and_activation_quantization.md)
+* [Applying magnitude pruning to an MNIST model](../tutorials/mnist_pruning.md)
 
 

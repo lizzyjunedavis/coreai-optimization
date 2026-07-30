@@ -73,6 +73,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_quantization.html">Applying quantization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_palettization.html">Applying palettization to an MNIST model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_palettization_and_activation_quantization.html">Applying joint palettization and activation quantization to an MNIST model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/mnist_pruning.html">Applying magnitude pruning to an MNIST model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/model_examples.html">Model Examples</a><ul>
@@ -97,15 +98,25 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../palettization/config.html">Config API</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../pruning/index.html">Pruning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../pruning/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pruning/overview.html">API Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pruning/config.html">Config API</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Other Workflows and Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../utils/joint_compression.html">Joint Compression</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/mixed_precision.html">Mixed-Precision Compression</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utils/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/activation_comparison.html">Comparing Intermediate Activations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/casting.html">16-bit PyTorch Model Casting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/coreai_compression.html">Compressing Core AI Models</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Debugging</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../debugging/model_inspection.html">Inspecting PyTorch Model Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../debugging/graph_mode_troubleshooting.html">Graph Mode Troubleshooting</a></li>
 </ul>
 <p class="caption" role="heading" aria-level="3"><span class="caption-text">Reference</span></p>
 <ul>
@@ -178,6 +189,7 @@ data-aria-dark="Switch to auto color mode">
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.pruning.spec.Unstructured.html">coreai_opt.pruning.spec.Unstructured</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.pruning.spec.default_weight_pruning_spec.html">coreai_opt.pruning.spec.default_weight_pruning_spec</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ExecutionMode.html">coreai_opt.quantization.ExecutionMode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.quantization.InvalidExecutionModeError.html">coreai_opt.quantization.InvalidExecutionModeError</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.html">coreai_opt.quantization.ModuleQuantizerConfig</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.presets.html">presets</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api/generated/coreai_opt.quantization.ModuleQuantizerConfig.presets.w4.html">w4</a></li>
@@ -511,7 +523,7 @@ This is what the context manager handles:</p>
 <p>The two modes are expected to produce very similar models for weight-only quantization. The only difference is that in graph mode, Batchnorm weights are folded with convolution weights such that quantization happens on the fused weights, whereas they are kept separate in the eager mode. This typically should not affect accuracy/latency by much, hence eager mode can be preferred over graph mode.</p>
 <p>A few scenarios where <code class="docutils literal notranslate"><span class="pre">eager</span></code> mode may need to be used instead of <code class="docutils literal notranslate"><span class="pre">graph</span></code>:</p>
 <ul class="simple">
-<li><p>If you run into any errors during the <code class="docutils literal notranslate"><span class="pre">prepare</span></code> call which, under the hood, invokes the <code class="docutils literal notranslate"><span class="pre">torch.export.export</span></code> and <code class="docutils literal notranslate"><span class="pre">torchao</span></code>’s <code class="docutils literal notranslate"><span class="pre">prepare_qat_pt2e</span></code>/<code class="docutils literal notranslate"><span class="pre">convert_pt2e</span></code> APIs.</p></li>
+<li><p>If you run into any errors during the <code class="docutils literal notranslate"><span class="pre">prepare</span></code> call which, under the hood, invokes the <code class="docutils literal notranslate"><span class="pre">torch.export.export</span></code> and <code class="docutils literal notranslate"><span class="pre">torchao</span></code>’s <code class="docutils literal notranslate"><span class="pre">prepare_qat_pt2e</span></code>/<code class="docutils literal notranslate"><span class="pre">convert_pt2e</span></code> APIs. See <a class="reference internal" href="../debugging/graph_mode_troubleshooting.html"><span class="std std-doc">Graph Mode Troubleshooting</span></a> for common export errors and workarounds before falling back to eager mode.</p></li>
 <li><p>When <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code> needs to be provided as an input, instead of <code class="docutils literal notranslate"><span class="pre">ExportedProgram</span></code> to the conversion API of <a class="reference external" href="https://github.com/apple/coreai-torch">coreai-torch</a>. This happens when the <code class="docutils literal notranslate"><span class="pre">coreai-torch</span></code> conversion needs to “externalize” certain sub-modules to map them to <em>composite ops</em> for better runtime performance.</p></li>
 </ul>
 </section>

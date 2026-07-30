@@ -190,6 +190,7 @@ Quantization compressor, configuration, specs, and granularity classes.
    :toctree: generated
 
    coreai_opt.quantization.ExecutionMode
+   coreai_opt.quantization.InvalidExecutionModeError
    coreai_opt.quantization.ModuleQuantizerConfig
    coreai_opt.quantization.QuantizationSpec
    coreai_opt.quantization.Quantizer
